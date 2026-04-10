@@ -1,0 +1,24 @@
+# Streaming / Media Platform Business Configuration
+# Products: movies, TV shows, podcasts
+
+algorithm: hybrid
+collab_weight: 0.55
+content_weight: 0.45
+
+interaction_scores:
+  view: 1.0
+  complete: 4.0      # watched to the end
+  like: 3.0
+  share: 3.5
+  rate: 4.0
+  watchlist_add: 2.0
+
+content_fields:
+  - name
+  - description
+  - product_type     # movie | series | documentary | podcast
+  - genre
+  - director
+  - cast
+  - release_year
+  - language

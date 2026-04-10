@@ -1,0 +1,22 @@
+# E-Commerce Business Configuration
+# Products: clothing, electronics, books, etc.
+
+algorithm: hybrid
+collab_weight: 0.6   # heavier on "users like you also bought"
+content_weight: 0.4
+
+interaction_scores:
+  view: 1.0
+  like: 2.5
+  add_to_cart: 3.5
+  purchase: 6.0
+  rate: 3.0
+
+# Which product attribute keys to use for content similarity
+content_fields:
+  - name
+  - description
+  - product_type
+  - brand
+  - category
+  - tags
