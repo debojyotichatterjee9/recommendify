@@ -12,10 +12,10 @@ from pydantic import BaseModel, Field
 
 
 class UserCreate(BaseModel):
-    name: str
-    email: str
-    external_id: str
-    business_id: str
+    name: str = Field(..., max_length=255)
+    email: str = Field(..., max_length=255)
+    external_id: str = Field(..., max_length=255)
+    business_id: str = Field(..., max_length=255)
 
 
 class UserOut(BaseModel):
@@ -32,11 +32,11 @@ class UserOut(BaseModel):
 
 
 class ProductCreate(BaseModel):
-    external_id: str
-    business_id: str
-    product_type: str
-    name: str
-    description: str = ""
+    external_id: str = Field(..., max_length=255)
+    business_id: str = Field(..., max_length=255)
+    product_type: str = Field(..., max_length=100)
+    name: str = Field(..., max_length=255)
+    description: str = Field(default="", max_length=2000)
     attributes: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -68,10 +68,10 @@ class ProductOut(BaseModel):
 
 
 class InteractionCreate(BaseModel):
-    user_external_id: str
-    product_external_id: str
-    business_id: str
-    event_type: str = Field(..., examples=["view", "like", "purchase", "rate"])
+    user_external_id: str = Field(..., max_length=255)
+    product_external_id: str = Field(..., max_length=255)
+    business_id: str = Field(..., max_length=255)
+    event_type: str = Field(..., max_length=100, examples=["view", "like", "purchase", "rate"])
     raw_score: float | None = None  # optional explicit score; otherwise config-derived
 
 
@@ -90,11 +90,11 @@ class InteractionOut(BaseModel):
 
 
 class RecommendRequest(BaseModel):
-    user_external_id: str
-    business_id: str
+    user_external_id: str = Field(..., max_length=255)
+    business_id: str = Field(..., max_length=255)
     top_n: int = Field(default=10, ge=1, le=100)
-    algorithm: str | None = (
-        None  # override config default: "content" | "collab" | "hybrid"
+    algorithm: str | None = Field(
+        default=None, max_length=50  # override config default: "content" | "collab" | "hybrid"
     )
 
 
