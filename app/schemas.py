@@ -1,20 +1,27 @@
 """Pydantic request/response schemas."""
+
 from __future__ import annotations
 
+import uuid
 from typing import Any
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-
 # ── Users ──────────────────────────────────────────────────────────────────
 
+
 class UserCreate(BaseModel):
+    name: str
+    email: str
     external_id: str
     business_id: str
 
 
 class UserOut(BaseModel):
-    id: int
+    id: UUID
+    name: str
+    email: str
     external_id: str
     business_id: str
 
@@ -22,6 +29,7 @@ class UserOut(BaseModel):
 
 
 # ── Products ───────────────────────────────────────────────────────────────
+
 
 class ProductCreate(BaseModel):
     external_id: str
@@ -33,7 +41,7 @@ class ProductCreate(BaseModel):
 
 
 class ProductOut(BaseModel):
-    id: int
+    id: UUID
     external_id: str
     business_id: str
     product_type: str
@@ -58,6 +66,7 @@ class ProductOut(BaseModel):
 
 # ── Interactions ───────────────────────────────────────────────────────────
 
+
 class InteractionCreate(BaseModel):
     user_external_id: str
     product_external_id: str
@@ -67,7 +76,9 @@ class InteractionCreate(BaseModel):
 
 
 class InteractionOut(BaseModel):
-    id: int
+    id: UUID
+    user_id: UUID
+    product_id: UUID
     business_id: str
     event_type: str
     score: float
@@ -77,18 +88,23 @@ class InteractionOut(BaseModel):
 
 # ── Recommendations ────────────────────────────────────────────────────────
 
+
 class RecommendRequest(BaseModel):
     user_external_id: str
     business_id: str
     top_n: int = Field(default=10, ge=1, le=100)
-    algorithm: str | None = None   # override config default: "content" | "collab" | "hybrid"
+    algorithm: str | None = (
+        None  # override config default: "content" | "collab" | "hybrid"
+    )
 
 
 class RecommendedProduct(BaseModel):
-    product_id: int
+    product_id: UUID
+    # user_id: UUID
+    product_type: str
+    description: str
     external_id: str
     name: str
-    product_type: str
     score: float
     attributes: dict[str, Any]
 
@@ -101,6 +117,7 @@ class RecommendResponse(BaseModel):
 
 
 # ── Business Config ────────────────────────────────────────────────────────
+
 
 class ConfigOut(BaseModel):
     business_id: str

@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 
 from app.database import Base, engine
+from app.routes import admin, interactions, products, recommendations, users
 # from app.routes import admin, interactions, products, recommendations, users
 
 # Create all tables on startup (SQLite auto-creates the file)
@@ -16,11 +17,11 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# app.include_router(users.router)
-# app.include_router(products.router)
-# app.include_router(interactions.router)
-# app.include_router(recommendations.router)
-# app.include_router(admin.router)
+app.include_router(users.router)
+app.include_router(products.router)
+app.include_router(interactions.router)
+app.include_router(recommendations.router)
+app.include_router(admin.router)
 
 
 @app.get("/", tags=["Health"])
