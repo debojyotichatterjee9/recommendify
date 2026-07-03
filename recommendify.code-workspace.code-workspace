@@ -6,7 +6,10 @@
 	],
 	"settings": {
 		"conventionalCommits.scopes": [
-			"1214025034633815"
+			"1214025034633815",
+			"RECOM-11",
+			"RECOM-10",
+			"Missing tests for Product attributes property"
 		]
 	}
 }

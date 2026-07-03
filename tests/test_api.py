@@ -1,13 +1,17 @@
 """Integration tests for the API endpoints."""
 import io
 import pytest
+from faker import Faker
+
+fake = Faker()
+
+BUSINESS_ID = "TESTBUS123"
 
 
-BUSINESS_ID = "test-bookshop"
-
-
-def _create_user(client, ext_id="user-1"):
-    return client.post("/users/", json={"external_id": ext_id, "business_id": BUSINESS_ID})
+def _create_user(client, ext_id="user-1", name=None, email=None):
+    name = name or fake.name()
+    email = email or fake.email()
+    return client.post("/users/", json={"name": name, "email": email, "external_id": ext_id, "business_id": BUSINESS_ID})
 
 
 def _create_product(client, ext_id="book-1", name="Python Crash Course"):
@@ -23,13 +27,13 @@ def _create_product(client, ext_id="book-1", name="Python Crash Course"):
 
 class TestUsers:
     def test_create_user(self, client):
-        r = _create_user(client, "u-api-1")
+        r = _create_user(client, ext_id="TESTEXTID", name="Test User", email="testuser@email.com")
         assert r.status_code == 201
-        assert r.json()["external_id"] == "u-api-1"
+        assert r.json()["external_id"] == "TESTEXTID"
 
     def test_duplicate_user_409(self, client):
-        _create_user(client, "u-dup")
-        r = _create_user(client, "u-dup")
+        _create_user(client, ext_id="u-dup", email="duplicate@example.com")
+        r = _create_user(client, ext_id="u-dup", email="duplicate@example.com")
         assert r.status_code == 409
 
     def test_get_user(self, client):
@@ -155,3 +159,9 @@ class TestAdminConfig:
         r = client.get(f"/admin/config/{BUSINESS_ID}")
         assert r.status_code == 200
         assert "collab" in r.json()["config_yaml"]
+
+class TestHealthCheck:
+    def test_health_check(self, client):
+        r = client.get("/")
+        assert r.status_code == 200
+        assert r.json() == {"status": "ok", "service": "Recommendation Service"}
