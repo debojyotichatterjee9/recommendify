@@ -159,3 +159,9 @@ class TestAdminConfig:
         r = client.get(f"/admin/config/{BUSINESS_ID}")
         assert r.status_code == 200
         assert "collab" in r.json()["config_yaml"]
+
+class TestHealthCheck:
+    def test_health_check(self, client):
+        r = client.get("/")
+        assert r.status_code == 200
+        assert r.json() == {"status": "ok", "service": "Recommendation Service"}
