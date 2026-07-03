@@ -45,10 +45,13 @@ class Product(Base):
 
     @property
     def attributes(self) -> dict:
-        return json.loads(self._attributes or "{}")
+        if not hasattr(self, "_parsed_attributes"):
+            self._parsed_attributes = json.loads(self._attributes or "{}")
+        return self._parsed_attributes
 
     @attributes.setter
     def attributes(self, value: dict):
+        self._parsed_attributes = value
         self._attributes = json.dumps(value)
 
 
