@@ -32,8 +32,8 @@ class TestUsers:
         assert r.json()["external_id"] == "TESTEXTID"
 
     def test_duplicate_user_409(self, client):
-        _create_user(client, "u-dup")
-        r = _create_user(client, "u-dup")
+        _create_user(client, ext_id="u-dup", email="duplicate@example.com")
+        r = _create_user(client, ext_id="u-dup", email="duplicate@example.com")
         assert r.status_code == 409
 
     def test_get_user(self, client):
