@@ -6,7 +6,7 @@ from app.database import Base, engine
 from app.routes import admin, interactions, products, recommendations, users
 # from app.routes import admin, interactions, products, recommendations, users
 
-# Create all tables on startup (SQLite auto-creates the file)
+# Create all tables on startup (For simple deployments)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(

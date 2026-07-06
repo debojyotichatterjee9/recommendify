@@ -13,7 +13,7 @@ A **product-agnostic** recommendation engine built with FastAPI. Drop in any bus
 | **Per-business config** | Upload a YAML file to override algorithm, weights, event scores, and content fields |
 | **Cold-start handling** | New users receive unseen products when no interaction history exists |
 | **Auto-docs** | Swagger UI at `/docs`, ReDoc at `/redoc` |
-| **Free stack** | SQLite · FastAPI · scikit-learn · pandas · pytest |
+| **Free stack** | PostgreSQL · FastAPI · scikit-learn · pandas · pytest |
 
 ---
 
@@ -22,7 +22,7 @@ A **product-agnostic** recommendation engine built with FastAPI. Drop in any bus
 | Component | Choice | Why |
 |---|---|---|
 | Framework | FastAPI | High performance, auto OpenAPI docs |
-| Database | SQLite (local) | Zero config, free, file-based |
+| Database | PostgreSQL | Industry-standard relational database |
 | ORM | SQLAlchemy 2.x | Pythonic, DB-agnostic |
 | Validation | Pydantic v2 | Fast, type-safe |
 | ML | scikit-learn + pandas | TF-IDF, cosine similarity, matrix ops |
@@ -38,7 +38,7 @@ A **product-agnostic** recommendation engine built with FastAPI. Drop in any bus
 recommendation-service/
 ├── app/
 │   ├── main.py                  # FastAPI app, router registration, DB init
-│   ├── database.py              # SQLite engine + session dependency
+│   ├── database.py              # PostgreSQL engine + session dependency
 │   ├── models.py                # SQLAlchemy: User, Product, Interaction, BusinessConfig
 │   ├── schemas.py               # Pydantic request/response models
 │   ├── config/
