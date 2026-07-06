@@ -9,6 +9,8 @@ All functions are pure / stateless; they receive data frames built from DB rows.
 """
 from __future__ import annotations
 
+import uuid
+
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -37,7 +39,7 @@ def _build_product_corpus(products_df: pd.DataFrame, content_fields: list[str]) 
 # ── content-based ──────────────────────────────────────────────────────────
 
 def content_based_scores(
-    target_product_ids: list[int],
+    target_product_ids: list[uuid.UUID],
     products_df: pd.DataFrame,
     content_fields: list[str],
 ) -> pd.Series:
@@ -70,9 +72,9 @@ def content_based_scores(
 # ── collaborative ──────────────────────────────────────────────────────────
 
 def collaborative_scores(
-    target_user_id: int,
+    target_user_id: uuid.UUID,
     interactions_df: pd.DataFrame,
-    all_product_ids: list[int],
+    all_product_ids: list[uuid.UUID],
 ) -> pd.Series:
     """Return a Series of {product_id: predicted_score} via user-based CF.
 
@@ -137,14 +139,14 @@ def hybrid_scores(
 # ── dispatcher ─────────────────────────────────────────────────────────────
 
 def get_recommendations(
-    target_user_id: int,
+    target_user_id: uuid.UUID,
     products_df: pd.DataFrame,
     interactions_df: pd.DataFrame,
     config: dict,
     top_n: int = 10,
     algorithm_override: str | None = None,
-) -> tuple[list[int], str]:
-    """Return (ordered list of product_ids, algorithm_name_used).
+) -> tuple[list[tuple[uuid.UUID, float]], str]:
+    """Return (list of (product_id, score), algorithm_name_used).
 
     products_df columns : id, name, description, product_type, attributes
     interactions_df cols: user_id, product_id, score
@@ -173,10 +175,18 @@ def get_recommendations(
 
     if scores.empty:
         # Cold-start: return random products the user hasn't seen
-        unseen = [pid for pid in all_product_ids if pid not in interacted_ids]
-        return unseen[:top_n], algorithm
+        unseen_ids = [pid for pid in all_product_ids if pid not in interacted_ids]
+        if not unseen_ids:
+            return [], algorithm
+
+        # Use random choice for discovery
+        selected_ids = np.random.choice(
+            unseen_ids, size=min(len(unseen_ids), top_n), replace=False
+        ).tolist()
+        # Cold start items get a neutral score
+        return [(pid, 0.5) for pid in selected_ids], algorithm
 
     # Exclude already-interacted products
     scores = scores.drop(index=[p for p in interacted_ids if p in scores.index], errors="ignore")
     top = scores.nlargest(top_n)
-    return top.index.tolist(), algorithm
+    return list(top.items()), algorithm
