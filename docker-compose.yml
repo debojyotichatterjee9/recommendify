@@ -1,10 +1,23 @@
 version: "3.9"
 
 services:
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+
   api:
     build: .
     ports:
       - "8000:8000"
     volumes:
       - .:/service        # mount source for hot-reload in dev
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      - db
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
