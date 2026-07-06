@@ -24,6 +24,15 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)):
     db.refresh(user)
     return user
 
+@router.get("/", response_model=list[UserOut])
+def get_user_list(db: Session = Depends(get_db)):
+    userList = (
+        db.query(User).all()
+    )
+    if not userList:
+        raise HTTPException(status_code=404, detail="User not found.")
+    # return [ProductOut.from_orm_product(p) for p in products]
+    return [UserOut.model_validate(u) for u in userList]
 
 @router.get("/{business_id}/{external_id}", response_model=UserOut)
 def get_user(business_id: str, external_id: str, db: Session = Depends(get_db)):
