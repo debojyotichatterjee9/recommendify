@@ -86,8 +86,36 @@ Open **http://localhost:8000/docs** for the interactive Swagger UI.
 
 ### 2. Docker
 
+We provide a complete Dockerized setup using `docker-compose.yml` which includes the application code with hot-reloading enabled via bind mounts and a PostgreSQL database with a persistent volume.
+
+#### Run the project
+To start the services (API and Database). Changes to code will automatically reflect thanks to the bind mount and uvicorn `--reload`:
 ```bash
 docker compose up --build
+```
+Or to run in detached mode:
+```bash
+docker compose up -d --build
+```
+
+#### Check logs
+To view the logs for all services:
+```bash
+docker compose logs -f
+```
+To view logs for a specific service (e.g., `api`):
+```bash
+docker compose logs -f api
+```
+
+#### Clean containers, images, volumes, and mounts
+To stop and remove containers and network:
+```bash
+docker compose down
+```
+To completely clean up (removes containers, networks, volumes, and images created by docker-compose):
+```bash
+docker compose down --volumes --rmi all
 ```
 
 ---
