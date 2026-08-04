@@ -9,7 +9,17 @@ import uuid
 from datetime import datetime, timezone
 
 from pydantic.types import UUID4
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text, Uuid
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+    Uuid,
+)
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -20,12 +30,17 @@ class User(Base):
 
     id = Column(Uuid, primary_key=True, index=True, default=uuid.uuid4)
     name = Column(String(255), index=True, nullable=False)
-    email = Column(String(255), index=True, unique=True, nullable=False)
-    external_id = Column(String(255), unique=True, index=True, nullable=False)
+    email = Column(String(255), index=True, nullable=False)
+    external_id = Column(String(255), index=True, nullable=False)
     business_id = Column(String(100), index=True, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     interactions = relationship("Interaction", back_populates="user")
+
+    __table_args__ = (
+        UniqueConstraint("business_id", "email", name="uq_user_business_email"),
+        UniqueConstraint("business_id", "external_id", name="uq_user_business_external_id"),
+    )
 
 
 class Product(Base):
@@ -35,13 +50,18 @@ class Product(Base):
     external_id = Column(String(255), index=True, nullable=False)
     business_id = Column(String(100), index=True, nullable=False)
     product_type = Column(String(100), nullable=False)  # e.g. "book", "car", "meal"
-    name = Column(String(500), unique=True, nullable=False)
+    name = Column(String(500), nullable=False)
     description = Column(Text, default="")
     # Arbitrary domain-specific fields stored as JSON string
     _attributes = Column("attributes", Text, default="{}")
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     interactions = relationship("Interaction", back_populates="product")
+
+    __table_args__ = (
+        UniqueConstraint("business_id", "name", name="uq_product_business_name"),
+        UniqueConstraint("business_id", "external_id", name="uq_product_business_external_id"),
+    )
 
     @property
     def attributes(self) -> dict:
