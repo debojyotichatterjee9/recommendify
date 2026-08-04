@@ -51,7 +51,7 @@ def recommend(payload: RecommendRequest, db: Session = Depends(get_db)):
         for i in interactions
     ]) if interactions else pd.DataFrame(columns=["user_id", "product_id", "score"])
 
-    top_ids, algo_used = get_recommendations(
+    recs, algo_used = get_recommendations(
         target_user_id=user.id,
         products_df=products_df,
         interactions_df=interactions_df,
@@ -63,25 +63,17 @@ def recommend(payload: RecommendRequest, db: Session = Depends(get_db)):
     # Fetch ordered product details
     id_to_product = {p.id: p for p in products}
 
-    # Build score map for response
-    scores_map: dict[int, float] = {}
-    if top_ids:
-        # Re-run to get raw scores for display (simplified: equal rank-based)
-        for rank, pid in enumerate(top_ids):
-            scores_map[pid] = round(1.0 - rank / max(len(top_ids), 1), 4)
-
     recommendations = [
         RecommendedProduct(
             product_id=pid,
-            # user_id=id_to_product[pid].user_id,
             external_id=id_to_product[pid].external_id,
             name=id_to_product[pid].name,
             product_type=id_to_product[pid].product_type,
-            score=scores_map.get(pid, 0.0),
+            score=round(float(score), 4),
             description=id_to_product[pid].description,
             attributes=id_to_product[pid].attributes,
         )
-        for pid in top_ids
+        for pid, score in recs
         if pid in id_to_product
     ]
 
