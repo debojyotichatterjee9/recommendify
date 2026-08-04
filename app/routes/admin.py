@@ -1,5 +1,5 @@
 """Admin endpoints: upload business configuration YAML."""
-from datetime import datetime
+from datetime import datetime, timezone
 
 import yaml
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
@@ -27,7 +27,7 @@ async def upload_config(
     row = db.query(BusinessConfig).filter_by(business_id=business_id).first()
     if row:
         row.config_yaml = text
-        row.updated_at = datetime.utcnow()
+        row.updated_at = datetime.now(timezone.utc)
     else:
         row = BusinessConfig(business_id=business_id, config_yaml=text)
         db.add(row)
