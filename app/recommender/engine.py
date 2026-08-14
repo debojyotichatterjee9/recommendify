@@ -7,6 +7,7 @@ Three strategies:
 
 All functions are pure / stateless; they receive data frames built from DB rows.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -17,10 +18,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 
-
 # ── helpers ────────────────────────────────────────────────────────────────
 
-def _build_product_corpus(products_df: pd.DataFrame, content_fields: list[str]) -> list[str]:
+
+def _build_product_corpus(
+    products_df: pd.DataFrame, content_fields: list[str]
+) -> list[str]:
     """Concatenate selected attribute fields into one text string per product."""
     corpus = []
     for _, row in products_df.iterrows():
@@ -37,6 +40,7 @@ def _build_product_corpus(products_df: pd.DataFrame, content_fields: list[str]) 
 
 
 # ── content-based ──────────────────────────────────────────────────────────
+
 
 def content_based_scores(
     target_product_ids: list[uuid.UUID],
@@ -71,6 +75,7 @@ def content_based_scores(
 
 # ── collaborative ──────────────────────────────────────────────────────────
 
+
 def collaborative_scores(
     target_user_id: uuid.UUID,
     interactions_df: pd.DataFrame,
@@ -86,7 +91,11 @@ def collaborative_scores(
 
     # Pivot: rows=users, cols=products, values=cumulative interaction score
     matrix = interactions_df.pivot_table(
-        index="user_id", columns="product_id", values="score", aggfunc="sum", fill_value=0
+        index="user_id",
+        columns="product_id",
+        values="score",
+        aggfunc="sum",
+        fill_value=0,
     )
 
     if target_user_id not in matrix.index:
@@ -111,13 +120,16 @@ def collaborative_scores(
     predicted = pd.Series(weighted_scores, index=matrix.columns)
 
     # Zero out products the user already interacted with
-    seen = interactions_df[interactions_df["user_id"] == target_user_id]["product_id"].unique()
+    seen = interactions_df[interactions_df["user_id"] == target_user_id][
+        "product_id"
+    ].unique()
     predicted[predicted.index.isin(seen)] = 0.0
 
     return predicted
 
 
 # ── hybrid ─────────────────────────────────────────────────────────────────
+
 
 def hybrid_scores(
     content_s: pd.Series,
@@ -138,6 +150,7 @@ def hybrid_scores(
 
 # ── dispatcher ─────────────────────────────────────────────────────────────
 
+
 def get_recommendations(
     target_user_id: uuid.UUID,
     products_df: pd.DataFrame,
@@ -152,7 +165,9 @@ def get_recommendations(
     interactions_df cols: user_id, product_id, score
     """
     algorithm = algorithm_override or config.get("algorithm", "hybrid")
-    content_fields: list[str] = config.get("content_fields", ["name", "description", "product_type"])
+    content_fields: list[str] = config.get(
+        "content_fields", ["name", "description", "product_type"]
+    )
     content_weight: float = config.get("content_weight", 0.5)
     collab_weight: float = config.get("collab_weight", 0.5)
 
@@ -170,7 +185,9 @@ def get_recommendations(
 
     else:  # hybrid
         content_s = content_based_scores(interacted_ids, products_df, content_fields)
-        collab_s = collaborative_scores(target_user_id, interactions_df, all_product_ids)
+        collab_s = collaborative_scores(
+            target_user_id, interactions_df, all_product_ids
+        )
         scores = hybrid_scores(content_s, collab_s, content_weight, collab_weight)
 
     if scores.empty:
@@ -187,6 +204,8 @@ def get_recommendations(
         return [(pid, 0.5) for pid in selected_ids], algorithm
 
     # Exclude already-interacted products
-    scores = scores.drop(index=[p for p in interacted_ids if p in scores.index], errors="ignore")
+    scores = scores.drop(
+        index=[p for p in interacted_ids if p in scores.index], errors="ignore"
+    )
     top = scores.nlargest(top_n)
     return list(top.items()), algorithm

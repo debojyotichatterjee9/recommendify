@@ -1,0 +1,358 @@
+{
+  "info": {
+    "_postman_id": "855b44e9-f331-4540-9766-ea1b8eaf53cf",
+    "name": "Recommendify",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6420440"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"external_id\": \"{{$randomBankAccountBic}}\",\n    \"business_id\": \"{{$randomBankAccountBic}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Default User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@maxmail.com\",\n    \"external_id\": \"{{EXTERNAL_ID}}\",\n    \"business_id\": \"{{BUSINESS_ID}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/users/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users/{{BUSINESS_ID}}/{{EXTERNAL_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users",
+                "{{BUSINESS_ID}}",
+                "{{EXTERNAL_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/users",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"external_id\": \"{{EXTERNAL_ID}}\",\n    \"business_id\": \"{{BUSINESS_ID}}\",\n    \"product_type\": \"Consumer Product\",\n    \"name\": \"{{$randomProduct}}\",\n    \"description\": \"{{$randomProductName}}\",\n    \"attributes\": {\n        \"category\": \"online\",\n        \"genre\": \"e-commerce\",\n        \"manufacturer\": \"{{$randomCompanyName}}\",\n        \"seller\": \"{{$randomCompanyName}}\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products List",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{BUSINESS_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "products",
+                "{{BUSINESS_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{BUSINESS_ID}}/{{EXTERNAL_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "products",
+                "{{BUSINESS_ID}}",
+                "{{EXTERNAL_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"external_id\": \"{{EXTERNAL_ID}}\",\n    \"business_id\": \"{{BUSINESS_ID}}\",\n    \"product_type\": \"Online Product\",\n    \"name\": \"{{$randomProduct}}\",\n    \"description\": \"{{$randomProductName}}\",\n    \"attributes\": {\n        \"category\": \"e-commerce\",\n        \"genre\": \"random\",\n        \"manufacturer\": \"{{$randomCompanyName}}\",\n        \"seller\": \"{{$randomCompanyName}}\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{BUSINESS_ID}}/{{EXTERNAL_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "products",
+                "{{BUSINESS_ID}}",
+                "{{EXTERNAL_ID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/products/{{BUSINESS_ID}}/{{EXTERNAL_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "products",
+                "{{BUSINESS_ID}}",
+                "{{EXTERNAL_ID}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Interaction",
+      "item": [
+        {
+          "name": "Generate Interaction",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user_external_id\": \"{{EXTERNAL_ID}}\",\n    \"product_external_id\": \"{{EXTERNAL_ID}}\",\n    \"business_id\": \"{{BUSINESS_ID}}\",\n    // \"event_type\": \"view\"\n    \"event_type\": \"like\"\n    // \"event_type\": \"purchase\"\n    // \"event_type\": \"rate\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/interactions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "interactions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Recommendation",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user_external_id\": \"QJMABTQ1419\",\n    \"business_id\": \"EYUIMXZ1MIJ\",\n    \"top_n\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8000/recommend/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "recommend",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}",
+              "host": [
+                "{{BASE_URL}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Load Config",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "type": "file",
+                  "key": "file",
+                  "src": [
+                    "/Users/debojyoti/Documents/projects/github/recommendify/app/config/ecommerce.yaml",
+                    "/Users/debojyoti/Documents/projects/github/recommendify/app/config/restaurant.yaml",
+                    "/Users/debojyoti/Documents/projects/github/recommendify/app/config/streaming.yaml",
+                    "/Users/debojyoti/Documents/projects/github/recommendify/app/config/ecommerce.yaml"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/admin/config/EYUIMXZ1MIJ",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "admin",
+                "config",
+                "EYUIMXZ1MIJ"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
