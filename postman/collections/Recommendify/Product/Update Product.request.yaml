@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{BASE_URL}}/products/{{BUSINESS_ID}}/{{EXTERNAL_ID}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "external_id": "{{EXTERNAL_ID}}",
+        "business_id": "{{BUSINESS_ID}}",
+        "product_type": "Online Product",
+        "name": "{{$randomProduct}}",
+        "description": "{{$randomProductName}}",
+        "attributes": {
+            "category": "e-commerce",
+            "genre": "random",
+            "manufacturer": "{{$randomCompanyName}}",
+            "seller": "{{$randomCompanyName}}"
+        }
+    }
+settings: {}
+order: 4000

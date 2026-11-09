@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{BASE_URL}}/products"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "external_id": "{{EXTERNAL_ID}}",
+        "business_id": "{{BUSINESS_ID}}",
+        "product_type": "Consumer Product",
+        "name": "{{$randomProduct}}",
+        "description": "{{$randomProductName}}",
+        "attributes": {
+            "category": "online",
+            "genre": "e-commerce",
+            "manufacturer": "{{$randomCompanyName}}",
+            "seller": "{{$randomCompanyName}}"
+        }
+    }
+settings: {}
+order: 1000

@@ -118,6 +118,14 @@ To completely clean up (removes containers, networks, volumes, and images create
 docker compose down --volumes --rmi all
 ```
 
+#### Connect via Database GUI (e.g., DBeaver)
+The PostgreSQL container maps port `5433` on the host to avoid conflicts with any local PostgreSQL instance:
+* **Host**: `localhost` (or `127.0.0.1`)
+* **Port**: `5433`
+* **Database**: `recommendify`
+* **Username**: `postgres`
+* **Password**: `postgres`
+
 ---
 
 ## API Overview

@@ -1,0 +1,8 @@
+name: Recommendify
+values:
+  - key: BASE_URL
+    value: ""
+  - key: EXTERNAL_ID
+    value: ""
+  - key: BUSINESS_ID
+    value: ""

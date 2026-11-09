@@ -8,6 +8,7 @@ from app.schemas import ProductCreate, ProductOut
 router = APIRouter(prefix="/products", tags=["Products"])
 
 
+# TODO: Check and change the route and handle duplicate entry error gracefully
 @router.post("/", response_model=ProductOut, status_code=201)
 def create_product(payload: ProductCreate, db: Session = Depends(get_db)):
     existing = (
@@ -53,6 +54,7 @@ def get_product(business_id: str, external_id: str, db: Session = Depends(get_db
     return ProductOut.from_orm_product(product)
 
 
+# TODO: Change to patch, look for all other similar requests
 @router.put("/{business_id}/{external_id}", response_model=ProductOut)
 def update_product(
     business_id: str,
@@ -76,6 +78,7 @@ def update_product(
     return ProductOut.from_orm_product(product)
 
 
+# TODO: Return a success/faliure response and add param for soft delete and hard delete for all other similar requests
 @router.delete("/{business_id}/{external_id}", status_code=204)
 def delete_product(business_id: str, external_id: str, db: Session = Depends(get_db)):
     product = (

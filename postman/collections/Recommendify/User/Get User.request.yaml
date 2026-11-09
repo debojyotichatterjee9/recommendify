@@ -1,0 +1,5 @@
+$kind: http-request
+url: "{{BASE_URL}}/users/{{BUSINESS_ID}}/{{EXTERNAL_ID}}"
+method: GET
+settings: {}
+order: 3000

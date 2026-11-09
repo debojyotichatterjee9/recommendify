@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{BASE_URL}}/users/"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "name": "John Doe",
+        "email": "john.doe@maxmail.com",
+        "external_id": "{{EXTERNAL_ID}}",
+        "business_id": "{{BUSINESS_ID}}"
+    }
+settings: {}
+order: 2000

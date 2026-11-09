@@ -10,9 +10,18 @@ router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post("/", response_model=UserOut, status_code=201)
 def create_user(payload: UserCreate, db: Session = Depends(get_db)):
-    existing = db.query(User).filter_by(email=payload.email.lower()).first()
-    if existing:
-        raise HTTPException(status_code=409, detail="User already exists.")
+    email_existing = db.query(User).filter_by(email=payload.email.lower()).first()
+    if email_existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"User with email '{payload.email.lower()}' already exists.",
+        )
+    ext_id_existing = db.query(User).filter_by(external_id=payload.external_id).first()
+    if ext_id_existing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"User with EXTERNAL_ID '{payload.external_id}' already exists.",
+        )
     user = User(
         name=payload.name,
         email=payload.email.lower(),
@@ -24,15 +33,15 @@ def create_user(payload: UserCreate, db: Session = Depends(get_db)):
     db.refresh(user)
     return user
 
+
 @router.get("/", response_model=list[UserOut])
 def get_user_list(db: Session = Depends(get_db)):
-    userList = (
-        db.query(User).all()
-    )
+    userList = db.query(User).all()
     if not userList:
         raise HTTPException(status_code=404, detail="User not found.")
     # return [ProductOut.from_orm_product(p) for p in products]
     return [UserOut.model_validate(u) for u in userList]
+
 
 @router.get("/{business_id}/{external_id}", response_model=UserOut)
 def get_user(business_id: str, external_id: str, db: Session = Depends(get_db)):
