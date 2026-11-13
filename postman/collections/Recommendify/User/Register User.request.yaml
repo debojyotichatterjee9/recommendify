@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{BASE_URL}}/users/"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "name": "{{$randomFullName}}",
+        "email": "{{$randomEmail}}",
+        "external_id": "{{$randomBankAccountBic}}",
+        "business_id": "{{$randomBankAccountBic}}"
+    }
+settings: {}
+order: 1000

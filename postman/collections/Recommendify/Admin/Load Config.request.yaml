@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:8000/admin/config/EYUIMXZ1MIJ
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /Users/debojyoti/Documents/projects/github/recommendify/app/config/ecommerce.yaml
+        - /Users/debojyoti/Documents/projects/github/recommendify/app/config/restaurant.yaml
+        - /Users/debojyoti/Documents/projects/github/recommendify/app/config/streaming.yaml
+        - /Users/debojyoti/Documents/projects/github/recommendify/app/config/ecommerce.yaml
+auth:
+  type: noauth
+settings: {}
+order: 2000

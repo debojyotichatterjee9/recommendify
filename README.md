@@ -13,7 +13,7 @@ A **product-agnostic** recommendation engine built with FastAPI. Drop in any bus
 | **Per-business config** | Upload a YAML file to override algorithm, weights, event scores, and content fields |
 | **Cold-start handling** | New users receive unseen products when no interaction history exists |
 | **Auto-docs** | Swagger UI at `/docs`, ReDoc at `/redoc` |
-| **Free stack** | SQLite · FastAPI · scikit-learn · pandas · pytest |
+| **Free stack** | PostgreSQL · FastAPI · scikit-learn · pandas · pytest |
 
 ---
 
@@ -22,7 +22,7 @@ A **product-agnostic** recommendation engine built with FastAPI. Drop in any bus
 | Component | Choice | Why |
 |---|---|---|
 | Framework | FastAPI | High performance, auto OpenAPI docs |
-| Database | SQLite (local) | Zero config, free, file-based |
+| Database | PostgreSQL | Industry-standard relational database |
 | ORM | SQLAlchemy 2.x | Pythonic, DB-agnostic |
 | Validation | Pydantic v2 | Fast, type-safe |
 | ML | scikit-learn + pandas | TF-IDF, cosine similarity, matrix ops |
@@ -38,7 +38,7 @@ A **product-agnostic** recommendation engine built with FastAPI. Drop in any bus
 recommendation-service/
 ├── app/
 │   ├── main.py                  # FastAPI app, router registration, DB init
-│   ├── database.py              # SQLite engine + session dependency
+│   ├── database.py              # PostgreSQL engine + session dependency
 │   ├── models.py                # SQLAlchemy: User, Product, Interaction, BusinessConfig
 │   ├── schemas.py               # Pydantic request/response models
 │   ├── config/
@@ -86,9 +86,45 @@ Open **http://localhost:8000/docs** for the interactive Swagger UI.
 
 ### 2. Docker
 
+We provide a complete Dockerized setup using `docker-compose.yml` which includes the application code with hot-reloading enabled via bind mounts and a PostgreSQL database with a persistent volume.
+
+#### Run the project
+To start the services (API and Database). Changes to code will automatically reflect thanks to the bind mount and uvicorn `--reload`:
 ```bash
 docker compose up --build
 ```
+Or to run in detached mode:
+```bash
+docker compose up -d --build
+```
+
+#### Check logs
+To view the logs for all services:
+```bash
+docker compose logs -f
+```
+To view logs for a specific service (e.g., `api`):
+```bash
+docker compose logs -f api
+```
+
+#### Clean containers, images, volumes, and mounts
+To stop and remove containers and network:
+```bash
+docker compose down
+```
+To completely clean up (removes containers, networks, volumes, and images created by docker-compose):
+```bash
+docker compose down --volumes --rmi all
+```
+
+#### Connect via Database GUI (e.g., DBeaver)
+The PostgreSQL container maps port `5433` on the host to avoid conflicts with any local PostgreSQL instance:
+* **Host**: `localhost` (or `127.0.0.1`)
+* **Port**: `5433`
+* **Database**: `recommendify`
+* **Username**: `postgres`
+* **Password**: `postgres`
 
 ---
 
