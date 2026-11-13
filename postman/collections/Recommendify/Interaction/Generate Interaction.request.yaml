@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:8000/interactions
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "user_external_id": "{{EXTERNAL_ID}}",
+        "product_external_id": "{{EXTERNAL_ID}}",
+        "business_id": "{{BUSINESS_ID}}",
+        // "event_type": "view"
+        "event_type": "like"
+        // "event_type": "purchase"
+        // "event_type": "rate"
+    }
+settings: {}
+order: 1000

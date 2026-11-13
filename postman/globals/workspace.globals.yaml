@@ -1,0 +1,8 @@
+name: Globals
+values:
+  - key: auth_token
+    value: ""
+    enabled: true
+  - key: item_uuid
+    value: d5f8c7c3-85bf-411a-a63c-cb954f523f4e
+    enabled: true

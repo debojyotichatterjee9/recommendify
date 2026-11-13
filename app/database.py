@@ -1,10 +1,12 @@
 """Database engine and session management."""
+
 import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 SQLALCHEMY_DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/recommendify"
+    "DATABASE_URL", "postgresql://postgres:@localhost:5432/recommendify"
 )
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

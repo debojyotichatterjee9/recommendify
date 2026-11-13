@@ -1,0 +1,19 @@
+workspace:
+  id: ""
+
+localResources:
+  collections:
+    - ../Recommendify
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../Recommendify: 6420440-855b44e9-f331-4540-9766-ea1b8eaf53cf
+    ../postman/collections/Recommendify: 6420440-855b44e9-f331-4540-9766-ea1b8eaf53cf
+  environments:
+    ../postman/environments/Docker PORT-8888.environment.yaml: 6420440-9d45b17c-ea0f-42ac-b117-01caa8702984
+    ../postman/environments/Recommendify.environment.yaml: 6420440-aedf911b-89d9-4318-b9b6-e5237f01ca3d
+    ../postman/environments/LOCALHOST-3000.environment.yaml: 6420440-d955a980-9816-459c-8d47-fcf610ce10a5
+  globals:
+    ../postman/globals/workspace.globals.yaml: d4253f3a-7a5c-4cdd-8858-f92bc429db06

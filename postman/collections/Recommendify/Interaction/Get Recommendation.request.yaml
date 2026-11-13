@@ -1,0 +1,17 @@
+$kind: http-request
+url: http://localhost:8000/recommend/
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "user_external_id": "QJMABTQ1419",
+        "business_id": "EYUIMXZ1MIJ",
+        "top_n": 5
+    }
+auth:
+  type: noauth
+settings: {}
+order: 2000
